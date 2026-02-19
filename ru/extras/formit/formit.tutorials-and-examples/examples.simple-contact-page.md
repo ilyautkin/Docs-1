@@ -49,37 +49,38 @@ description: "Пример простой контактной формы свя
 ```html
 <h2>Контактная форма</h2>
 
-[[!+fi.validation_error_message:notempty=`<p>[[!+fi.validation_error_message]]</p>`]]
-
 <form action="[[~[[*id]]]]" method="post" class="form">
+    [[!+fi.validation_error_message]]
+    [[!+fi.successMessage]]
+
     <input type="hidden" name="nospam" value="" />
 
     <label for="name">
         Имя:
-        <span class="error">[[!+fi.error.name]]</span>
+        [[!+fi.error.name]]
     </label>
     <input type="text" name="name" id="name" value="[[!+fi.name]]" />
 
     <label for="email">
         Email:
-        <span class="error">[[!+fi.error.email]]</span>
+        [[!+fi.error.email]]
     </label>
     <input type="text" name="email" id="email" value="[[!+fi.email]]" />
 
     <label for="subject">
         Тема:
-        <span class="error">[[!+fi.error.subject]]</span>
+        [[!+fi.error.subject]]
     </label>
     <input type="text" name="subject" id="subject" value="[[!+fi.subject]]" />
 
     <label for="text">
         Сообщение:
-        <span class="error">[[!+fi.error.text]]</span>
+        [[!+fi.error.text]]
     </label>
     <textarea name="text" id="text" cols="55" rows="7" value="[[!+fi.text]]">[[!+fi.text]]</textarea>
 
     <label>
-        Числа:[[+fi.error.numbers]]
+        Числа: [[+fi.error.numbers]]
         <select name="numbers" value="[[!+fi.numbers]]">
             <option value="">Выберите вариант...</option>
             <option value="one" [[!+fi.numbers:FormItIsSelected=`one`]]>Один</option>
@@ -89,9 +90,10 @@ description: "Пример простой контактной формы свя
     </label>
 
     <label>
-        Цвета:[[!+fi.error.colors]]
+        Цвета: [[!+fi.error.colors]]
         <input type="hidden" name="colors[]" value="" />
     </label>
+
     <ul>
       <li>
         <label><input type="checkbox" name="colors[]" value="red" [[!+fi.colors:FormItIsChecked=`red`]] /> Красный</label>

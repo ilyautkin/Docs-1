@@ -49,37 +49,38 @@ This HTML code must be called on website page where you want to see Contact Form
 ``` html
 <h2>Contact Form</h2>
 
-[[!+fi.validation_error_message:notempty=`<p>[[!+fi.validation_error_message]]</p>`]]
-
 <form action="[[~[[*id]]]]" method="post" class="form">
+    [[!+fi.validation_error_message]]
+    [[!+fi.successMessage]]
+
     <input type="hidden" name="nospam" value="" />
 
     <label for="name">
         Name:
-        <span class="error">[[!+fi.error.name]]</span>
+        [[!+fi.error.name]]
     </label>
     <input type="text" name="name" id="name" value="[[!+fi.name]]" />
 
     <label for="email">
         Email:
-        <span class="error">[[!+fi.error.email]]</span>
+        [[!+fi.error.email]]
     </label>
     <input type="text" name="email" id="email" value="[[!+fi.email]]" />
 
     <label for="subject">
         Subject:
-        <span class="error">[[!+fi.error.subject]]</span>
+        [[!+fi.error.subject]]
     </label>
     <input type="text" name="subject" id="subject" value="[[!+fi.subject]]" />
 
     <label for="text">
         Message:
-        <span class="error">[[!+fi.error.text]]</span>
+        [[!+fi.error.text]]
     </label>
     <textarea name="text" id="text" cols="55" rows="7" value="[[!+fi.text]]">[[!+fi.text]]</textarea>
 
     <label>
-        Numbers:[[+fi.error.numbers]]
+        Numbers: [[+fi.error.numbers]]
         <select name="numbers" value="[[!+fi.numbers]]">
             <option value="">Select an option...</option>
             <option value="one" [[!+fi.numbers:FormItIsSelected=`one`]]>One</option>
@@ -89,9 +90,10 @@ This HTML code must be called on website page where you want to see Contact Form
     </label>
 
     <label>
-        Colors:[[!+fi.error.colors]]
+        Colors: [[!+fi.error.colors]]
         <input type="hidden" name="colors[]" value="" />
     </label>
+
     <ul>
       <li>
         <label><input type="checkbox" name="colors[]" value="red" [[!+fi.colors:FormItIsChecked=`red`]] /> Red</label>
