@@ -1,0 +1,282 @@
+---
+title: "Отправка формы через AJAX"
+translation: "extras/formit/formit.ajax"
+description: "Отправка формы через AJAX без перезагрузки страницы"
+---
+
+## Отправка формы через AJAX
+
+FormIt может отправлять формы через AJAX без полной перезагрузки страницы. Ошибки валидации, сообщения об успехе и редиректы обрабатываются на клиентской стороне с помощью встроенной JavaScript-библиотеки.
+
+## Настройка
+
+Для включения поддержки AJAX установите системную настройку `formit.frontend_js`:
+
+| Настройка | Значение |
+|---|---|
+| `formit.frontend_js` | `js/web/formit.js` |
+
+Это автоматически подключит JavaScript-файл FormIt и настроит URL AJAX-эндпоинта.
+
+## Как это работает
+
+1. Сниппет FormIt сохраняет свою конфигурацию (хуки, правила валидации и т.д.) в сессии/кэше на сервере и выводит MD5-хеш в плейсхолдер `[[!+fi.ajaxToken]]`.
+2. Вы размещаете этот хеш в атрибуте `data-formit-ajax-token` на теге `<form>`.
+3. JavaScript-библиотека автоматически инициализирует все формы с этим атрибутом.
+4. При отправке формы JS перехватывает событие, отправляет данные формы + токен через `fetch()` на `action.php`.
+5. Эндпоинт извлекает исходную конфигурацию сниппета по хешу, выполняет обработку FormIt на сервере и возвращает JSON-ответ.
+6. JS обновляет DOM: отображает ошибки полей, сообщения валидации, сообщения об успехе или выполняет редирект.
+
+## Вызов сниппета
+
+Вызов сниппета такой же, как и для обычной формы. Для AJAX не нужны специальные параметры:
+
+```php
+[[!FormIt?
+    &hooks=`email,redirect`
+    &emailTpl=`MyEmailChunk`
+    &emailTo=`user@example.com`
+    &emailFrom=`[[++emailsender]]`
+    &redirectTo=`123`
+    &validate=`name:required,
+        email:email:required,
+        subject:required,
+        message:required:stripTags`
+]]
+```
+
+## HTML формы
+
+Чтобы форма работала через AJAX, добавьте атрибут `data-formit-ajax-token` на тег `<form>` и используйте атрибуты `data-formit-*` для элементов ошибок и сообщений:
+
+```html
+<form action="[[~[[*id]]]]" method="post" class="form"
+      data-formit-ajax-token="[[!+fi.ajaxToken]]">
+
+    <div data-formit-validation-error-message>[[!+fi.validation_error_message]]</div>
+    <div data-formit-success-message>[[!+fi.successMessage]]</div>
+
+    <input type="hidden" name="nospam" value="" />
+
+    <label for="name">
+        Имя:
+        <span data-formit-error="name">[[!+fi.error.name]]</span>
+    </label>
+    <input type="text" name="name" id="name" value="[[!+fi.name]]" />
+
+    <label for="email">
+        Email:
+        <span data-formit-error="email">[[!+fi.error.email]]</span>
+    </label>
+    <input type="text" name="email" id="email" value="[[!+fi.email]]" />
+
+    <label for="subject">
+        Тема:
+        <span data-formit-error="subject">[[!+fi.error.subject]]</span>
+    </label>
+    <input type="text" name="subject" id="subject" value="[[!+fi.subject]]" />
+
+    <label for="text">
+        Сообщение:
+        <span data-formit-error="text">[[!+fi.error.text]]</span>
+    </label>
+    <textarea name="text" id="text" cols="55" rows="7" value="[[!+fi.text]]">[[!+fi.text]]</textarea>
+
+    <label>
+        Числа: <span data-formit-error="numbers">[[+fi.error.numbers]]</span>
+        <select name="numbers" value="[[!+fi.numbers]]">
+            <option value="">Выберите вариант...</option>
+            <option value="one" [[!+fi.numbers:FormItIsSelected=`one`]]>Один</option>
+            <option value="two" [[!+fi.numbers:FormItIsSelected=`two`]]>Два</option>
+            <option value="three" [[!+fi.numbers:FormItIsSelected=`three`]]>Три</option>
+        </select>
+    </label>
+
+    <label>
+        Цвета: <span data-formit-error="colors">[[!+fi.error.colors]]</span>
+        <input type="hidden" name="colors[]" value="" />
+    </label>
+
+    <ul>
+      <li>
+        <label><input type="checkbox" name="colors[]" value="red" [[!+fi.colors:FormItIsChecked=`red`]] /> Красный</label>
+      </li>
+      <li>
+        <label><input type="checkbox" name="colors[]" value="blue" [[!+fi.colors:FormItIsChecked=`blue`]] /> Синий</label>
+      </li>
+      <li>
+        <label><input type="checkbox" name="colors[]" value="green" [[!+fi.colors:FormItIsChecked=`green`]] /> Зеленый</label>
+      </li>
+    </ul>
+
+    <br class="clear" />
+
+    [[!+formit.recaptcha_html]]
+    <span data-formit-error="recaptcha">[[!+fi.error.recaptcha]]</span>
+
+    <br class="clear" />
+
+    <div class="form-buttons">
+        <input type="submit" value="Отправить" />
+    </div>
+</form>
+```
+
+> **Примечание:** Атрибут `action` сохранён как запасной вариант на случай, если JavaScript отключён. В AJAX-режиме форма отправляется на `action.php`.
+
+### Справочник data-атрибутов
+
+| Атрибут | Элемент | Описание |
+|---|---|---|
+| `data-formit-ajax-token` | `<form>` | Активирует AJAX-режим. Значение должно быть `[[!+fi.ajaxToken]]`. |
+| `data-formit-error="fieldname"` | `<span>` | Отображает ошибку валидации для конкретного поля. JS заполняет `innerHTML` текстом ошибки. |
+| `data-formit-validation-error-message` | `<div>` | Отображает общее сообщение об ошибке валидации (эквивалент `[[!+fi.validation_error_message]]`). |
+| `data-formit-success-message` | `<div>` | Отображает сообщение об успехе (из свойства `&successMessage`). |
+
+Все элементы `data-formit-error` и сообщений очищаются перед каждой отправкой.
+
+## JavaScript API
+
+### Автоматическая инициализация
+
+Формы с атрибутом `data-formit-ajax-token` автоматически инициализируются при событии `DOMContentLoaded`. Для базового использования дополнительный JavaScript не нужен.
+
+### Ручная инициализация
+
+Для большего контроля вы можете инициализировать FormIt вручную с пользовательскими опциями:
+
+```javascript
+var form = document.getElementById('my-form');
+var fi = new FormIt(form, {
+    clearOnSuccess: true,
+    onBeforeSubmit: function (form) {
+        console.log('Отправка...');
+        // return false для отмены отправки
+    },
+    onSuccess: function (data) {
+        console.log('Форма успешно отправлена', data);
+    },
+    onError: function (data) {
+        console.log('Ошибка валидации', data);
+    },
+    onComplete: function () {
+        console.log('Запрос завершён');
+    },
+    onRedirect: function (url) {
+        console.log('Перенаправление на', url);
+        // return false для предотвращения редиректа
+    }
+});
+```
+
+### Опции
+
+| Опция | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `clearOnSuccess` | Boolean | `true` | Сбросить форму после успешной отправки (когда нет редиректа). |
+| `onBeforeSubmit` | Function | `null` | Вызывается перед AJAX-запросом. Получает элемент формы. Верните `false` для отмены. |
+| `onSuccess` | Function | `null` | Вызывается при успешной отправке. Получает данные ответа. |
+| `onError` | Function | `null` | Вызывается при ошибке валидации. Получает данные ответа. |
+| `onComplete` | Function | `null` | Вызывается после каждого запроса независимо от результата. |
+| `onRedirect` | Function | `null` | Вызывается перед редиректом. Получает URL. Верните `false` для предотвращения редиректа. |
+
+### Глобальные значения по умолчанию
+
+Вы можете переопределить значения по умолчанию глобально до инициализации:
+
+```javascript
+FormIt.defaults.clearOnSuccess = false;
+```
+
+## JavaScript-события
+
+Элемент формы отправляет `CustomEvent`, которые можно слушать через `addEventListener`. Все события всплывают (bubble).
+
+| Событие | Отменяемое | `event.detail` | Описание |
+|---|---|---|---|
+| `formit:beforesubmit` | Да | `{ form }` | Срабатывает перед AJAX-запросом. Вызовите `event.preventDefault()` для отмены. |
+| `formit:success` | Нет | `{ data }` | Срабатывает при успешной отправке. |
+| `formit:error` | Нет | `{ data }` | Срабатывает при ошибке валидации. |
+| `formit:complete` | Нет | `{}` | Срабатывает после каждого запроса (успех или ошибка). |
+| `formit:redirect` | Да | `{ url }` | Срабатывает перед редиректом. Вызовите `event.preventDefault()` для отмены. |
+
+Пример:
+
+```javascript
+document.getElementById('my-form').addEventListener('formit:success', function (e) {
+    alert('Спасибо! Ваша форма была отправлена.');
+});
+```
+
+## Обработка редиректов
+
+Когда используется хук `redirect`, AJAX-режим **не** выполняет серверный редирект. Вместо этого:
+
+1. Сервер возвращает поле `redirect_url` в JSON-ответе.
+2. JS отправляет отменяемое событие `formit:redirect`.
+3. Если событие не отменено (через `event.preventDefault()` или возврат `false` из `onRedirect`), JS устанавливает `window.location.href` на URL редиректа.
+
+Это позволяет перехватить редирект и обработать его по-своему (например, загрузить контент через AJAX, показать сообщение благодарности на месте и т.д.).
+
+## CSS-состояние загрузки
+
+Во время AJAX-запроса:
+
+- CSS-класс `formit-loading` добавляется к элементу `<form>`.
+- Все кнопки `[type="submit"]` внутри формы получают атрибут `disabled`.
+
+Оба состояния снимаются после завершения запроса.
+
+Вы можете использовать это для стилизации индикатора загрузки:
+
+```css
+.formit-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+```
+
+## Структура JSON-ответа
+
+Для продвинутых сценариев, AJAX-эндпоинт возвращает JSON-объект следующей структуры:
+
+```json
+{
+    "success": true,
+    "message": "Сообщение об успехе или ошибке",
+    "redirect_url": "https://example.com/thank-you",
+    "placeholders": {
+        "error.name": "Это поле обязательно для заполнения.",
+        "error.email": "Пожалуйста, введите корректный email.",
+        "validation_error_message": "Произошла ошибка валидации формы.",
+        "successMessage": "Форма успешно отправлена."
+    }
+}
+```
+
+| Поле | Тип | Описание |
+|---|---|---|
+| `success` | Boolean | `true`, если форма прошла все проверки и хуки выполнились успешно. |
+| `message` | String | Сообщение об успехе или ошибке. |
+| `redirect_url` | String | Присутствует только когда активен хук `redirect`. |
+| `placeholders` | Object | Все плейсхолдеры FormIt (с удалённым префиксом `fi.`). Ошибки полей находятся в `error.fieldname`. |
+
+## Посмотрите также
+
+1. [Хуки](extras/formit/formit.hooks)
+    1. [FormIt.Hooks.email](extras/formit/formit.hooks/email)
+    2. [FormIt.Hooks.FormItAutoResponder](extras/formit/formit.hooks/formitautoresponder)
+    3. [FormIt.Hooks.math](extras/formit/formit.hooks/math)
+    4. [FormIt.Hooks.recaptcha](extras/formit/formit.hooks/recaptcha)
+    5. [FormIt.Hooks.redirect](extras/formit/formit.hooks/redirect)
+    6. [FormIt.Hooks.spam](extras/formit/formit.hooks/spam)
+    7. [FormIt.Hooks.FormItSaveForm](extras/formit/formit.hooks/formitsaveform)
+2. [Валидаторы](extras/formit/formit.validators)
+3. [FormItRetriever](extras/formit/formit.formitretriever)
+4. [Руководства и примеры](extras/formit/formit.tutorials-and-examples)
+    1. [Пользовательский произвольный хук](extras/formit/formit.tutorials-and-examples/examples.custom-hook)
+    2. [Пример простой формы](extras/formit/formit.tutorials-and-examples/examples.simple-contact-page)
+    3. [Обработка выпадающих списков, чекбоксов и радио кнопок](extras/formit/formit.tutorials-and-examples/handling-selects,-checkboxes-and-radios)
+    4. [Использование пустого поля для защиты от спама](extras/formit/formit.tutorials-and-examples/using-a-blank-nospam-field)
+5. [FormItCountryOptions](extras/formit/formit.formitcountryoptions)
+6. [FormItStateOptions](extras/formit/formit.formitstateoptions)
