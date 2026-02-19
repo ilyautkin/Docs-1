@@ -76,9 +76,9 @@ To make a form work with AJAX, add the `data-formit-ajax-token` attribute to the
 
     <label for="text">
         Message:
-        <span data-formit-error="text">[[!+fi.error.text]]</span>
+        <span data-formit-error="message">[[!+fi.error.message]]</span>
     </label>
-    <textarea name="text" id="text" cols="55" rows="7" value="[[!+fi.text]]">[[!+fi.text]]</textarea>
+    <textarea name="message" id="message" cols="55" rows="7" value="[[!+fi.message]]">[[!+fi.message]]</textarea>
 
     <label>
         Numbers: <span data-formit-error="numbers">[[+fi.error.numbers]]</span>
