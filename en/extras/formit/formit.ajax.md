@@ -39,7 +39,7 @@ The snippet call is the same as for a regular form. No special parameters are ne
     &validate=`name:required,
         email:email:required,
         subject:required,
-        message:required:stripTags`
+        text:required:stripTags`
 ]]
 ```
 
@@ -77,9 +77,9 @@ To make a form work with AJAX, add the `data-formit-ajax-token` attribute to the
 
     <label for="text">
         Message:
-        <span data-formit-error="message">[[!+fi.error.message]]</span>
+        <span data-formit-error="text">[[!+fi.error.text]]</span>
     </label>
-    <textarea name="message" id="message" cols="55" rows="7" value="[[!+fi.message]]">[[!+fi.message]]</textarea>
+    <textarea name="text" id="text" cols="55" rows="7" value="[[!+fi.text]]">[[!+fi.text]]</textarea>
 
     <label>
         Numbers: <span data-formit-error="numbers">[[+fi.error.numbers]]</span>
