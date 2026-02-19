@@ -41,7 +41,7 @@ FormIt может отправлять формы через AJAX без пол�
     &validate=`name:required,
         email:email:required,
         subject:required,
-        message:required:stripTags`
+        text:required:stripTags`
 ]]
 ```
 
@@ -55,6 +55,7 @@ FormIt может отправлять формы через AJAX без пол�
 
     <div data-formit-validation-error-message>[[!+fi.validation_error_message]]</div>
     <div data-formit-success-message>[[!+fi.successMessage]]</div>
+    <div class="error" data-formit-error-message>[[!+fi.error_message]]</div>
 
     <input type="hidden" name="nospam" value="" />
 
@@ -76,11 +77,11 @@ FormIt может отправлять формы через AJAX без пол�
     </label>
     <input type="text" name="subject" id="subject" value="[[!+fi.subject]]" />
 
-    <label for="message">
+    <label for="text">
         Сообщение:
-        <span data-formit-error="message">[[!+fi.error.message]]</span>
+        <span data-formit-error="text">[[!+fi.error.text]]</span>
     </label>
-    <textarea name="message" id="message" cols="55" rows="7" value="[[!+fi.message]]">[[!+fi.message]]</textarea>
+    <textarea name="text" id="text" cols="55" rows="7" value="[[!+fi.text]]">[[!+fi.text]]</textarea>
 
     <label>
         Числа: <span data-formit-error="numbers">[[+fi.error.numbers]]</span>
@@ -132,6 +133,7 @@ FormIt может отправлять формы через AJAX без пол�
 | `data-formit-error="fieldname"` | `<span>` | Отображает ошибку валидации для конкретного поля. JS заполняет `innerHTML` текстом ошибки. |
 | `data-formit-validation-error-message` | `<div>` | Отображает общее сообщение об ошибке валидации (эквивалент `[[!+fi.validation_error_message]]`). |
 | `data-formit-success-message` | `<div>` | Отображает сообщение об успехе (из свойства `&successMessage`). |
+| `data-formit-error-message` | `<div>` | Отображает ошибки хуков (из `[[!+fi.error_message]]`). |
 
 Все элементы `data-formit-error` и сообщений очищаются перед каждой отправкой.
 
