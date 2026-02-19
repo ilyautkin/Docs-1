@@ -53,6 +53,7 @@ To make a form work with AJAX, add the `data-formit-ajax-token` attribute to the
 
     <div data-formit-validation-error-message>[[!+fi.validation_error_message]]</div>
     <div data-formit-success-message>[[!+fi.successMessage]]</div>
+    <div class="error" data-formit-error-message>[[!+fi.error_message]]</div>
 
     <input type="hidden" name="nospam" value="" />
 
@@ -130,6 +131,7 @@ To make a form work with AJAX, add the `data-formit-ajax-token` attribute to the
 | `data-formit-error="fieldname"` | `<span>` | Displays the validation error for a specific field. The JS fills `innerHTML` with the error text. |
 | `data-formit-validation-error-message` | `<div>` | Displays the general validation error message (equivalent of `[[!+fi.validation_error_message]]`). |
 | `data-formit-success-message` | `<div>` | Displays the success message (from `&successMessage` property). |
+| `data-formit-error-message` | `<div>` | Displays hooks error message (from `[[!+fi.error_message]]`). |
 
 All `data-formit-error` and message elements are cleared before each submission.
 
