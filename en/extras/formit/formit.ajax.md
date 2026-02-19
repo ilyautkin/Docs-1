@@ -244,9 +244,9 @@ For advanced use cases, the AJAX endpoint returns a JSON object with this struct
     "message": "Success message or error message",
     "redirect_url": "https://example.com/thank-you",
     "placeholders": {
-        "error.name": "This field is required.",
-        "error.email": "Please enter a valid email.",
-        "validation_error_message": "A form validation error occurred.",
+        "error.name": "<span class=\"error\">This field is required.</span>",
+        "error.email": "<span class=\"error\">Please enter a valid email.</span>",
+        "validation_error_message": "<p class=\"error\">A form validation error occurred.</p>",
         "successMessage": "Form submitted successfully."
     }
 }
