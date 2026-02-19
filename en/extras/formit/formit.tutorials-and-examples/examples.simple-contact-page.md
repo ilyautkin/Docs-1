@@ -52,6 +52,7 @@ This HTML code must be called on website page where you want to see Contact Form
 <form action="[[~[[*id]]]]" method="post" class="form">
     [[!+fi.validation_error_message]]
     [[!+fi.successMessage]]
+    <div class="error">[[!+fi.error_message]]</div>
 
     <input type="hidden" name="nospam" value="" />
 
