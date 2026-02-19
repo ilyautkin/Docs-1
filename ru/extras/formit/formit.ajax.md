@@ -246,9 +246,9 @@ document.getElementById('my-form').addEventListener('formit:success', function (
     "message": "Сообщение об успехе или ошибке",
     "redirect_url": "https://example.com/thank-you",
     "placeholders": {
-        "error.name": "Это поле обязательно для заполнения.",
-        "error.email": "Пожалуйста, введите корректный email.",
-        "validation_error_message": "Произошла ошибка валидации формы.",
+        "error.name": "<span class=\"error\">Это поле обязательно для заполнения.</span>",
+        "error.email": "<span class=\"error\">Пожалуйста, введите корректный email.</span>",
+        "validation_error_message": "<p class=\"error\">Произошла ошибка валидации формы.</p>",
         "successMessage": "Форма успешно отправлена."
     }
 }
