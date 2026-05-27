@@ -55,60 +55,52 @@ FormIt может отправлять формы через AJAX без пол�
 
     <div data-formit-validation-error-message>[[!+fi.validation_error_message]]</div>
     <div data-formit-success-message>[[!+fi.successMessage]]</div>
-    <div class="error" data-formit-error-message>[[!+fi.error_message]]</div>
 
-    <input type="hidden" name="nospam" value="" />
-
-    <label for="name">
-        Имя:
+    <div class="form-field">
+        <label for="name">Имя:</label>
+        <input type="text" name="name" id="name" value="[[!+fi.name]]" />
         <span data-formit-error="name">[[!+fi.error.name]]</span>
-    </label>
-    <input type="text" name="name" id="name" value="[[!+fi.name]]" />
+    </div>
 
-    <label for="email">
-        Email:
+    <div class="form-field">
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email" value="[[!+fi.email]]" />
         <span data-formit-error="email">[[!+fi.error.email]]</span>
-    </label>
-    <input type="text" name="email" id="email" value="[[!+fi.email]]" />
+    </div>
 
-    <label for="subject">
-        Тема:
+    <div class="form-field">
+        <label for="subject">Тема:</label>
+        <input type="text" name="subject" id="subject" value="[[!+fi.subject]]" />
         <span data-formit-error="subject">[[!+fi.error.subject]]</span>
-    </label>
-    <input type="text" name="subject" id="subject" value="[[!+fi.subject]]" />
+    </div>
 
-    <label for="text">
-        Сообщение:
+    <div class="form-field">
+        <label for="text">Сообщение:</label>
+        <textarea name="text" id="text" cols="55" rows="7">[[!+fi.text]]</textarea>
         <span data-formit-error="text">[[!+fi.error.text]]</span>
-    </label>
-    <textarea name="text" id="text" cols="55" rows="7" value="[[!+fi.text]]">[[!+fi.text]]</textarea>
+    </div>
 
-    <label>
-        Числа: <span data-formit-error="numbers">[[+fi.error.numbers]]</span>
-        <select name="numbers" value="[[!+fi.numbers]]">
+    <div class="form-field">
+        <label for="numbers">Числа:</label>
+        <select name="numbers" id="numbers">
             <option value="">Выберите вариант...</option>
             <option value="one" [[!+fi.numbers:FormItIsSelected=`one`]]>Один</option>
             <option value="two" [[!+fi.numbers:FormItIsSelected=`two`]]>Два</option>
             <option value="three" [[!+fi.numbers:FormItIsSelected=`three`]]>Три</option>
         </select>
-    </label>
+        <span data-formit-error="numbers">[[!+fi.error.numbers]]</span>
+    </div>
 
-    <label>
-        Цвета: <span data-formit-error="colors">[[!+fi.error.colors]]</span>
+    <div class="form-field">
+        <label>Цвета:</label>
         <input type="hidden" name="colors[]" value="" />
-    </label>
-
-    <ul>
-      <li>
-        <label><input type="checkbox" name="colors[]" value="red" [[!+fi.colors:FormItIsChecked=`red`]] /> Красный</label>
-      </li>
-      <li>
-        <label><input type="checkbox" name="colors[]" value="blue" [[!+fi.colors:FormItIsChecked=`blue`]] /> Синий</label>
-      </li>
-      <li>
-        <label><input type="checkbox" name="colors[]" value="green" [[!+fi.colors:FormItIsChecked=`green`]] /> Зеленый</label>
-      </li>
-    </ul>
+        <ul>
+            <li><label><input type="checkbox" name="colors[]" value="red" [[!+fi.colors:FormItIsChecked=`red`]] /> Красный</label></li>
+            <li><label><input type="checkbox" name="colors[]" value="blue" [[!+fi.colors:FormItIsChecked=`blue`]] /> Синий</label></li>
+            <li><label><input type="checkbox" name="colors[]" value="green" [[!+fi.colors:FormItIsChecked=`green`]] /> Зелёный</label></li>
+        </ul>
+        <span data-formit-error="colors">[[!+fi.error.colors]]</span>
+    </div>
 
     <div class="form-buttons">
         <input type="submit" value="Отправить" />
