@@ -108,13 +108,6 @@ To make a form work with AJAX, add the `data-formit-ajax-token` attribute to the
       </li>
     </ul>
 
-    <br class="clear" />
-
-    [[!+formit.recaptcha_html]]
-    <span data-formit-error="recaptcha">[[!+fi.error.recaptcha]]</span>
-
-    <br class="clear" />
-
     <div class="form-buttons">
         <input type="submit" value="Send Contact Inquiry" />
     </div>
@@ -140,53 +133,6 @@ All `data-formit-error` and message elements are cleared before each submission.
 ### Auto-initialization
 
 Forms with the `data-formit-ajax-token` attribute are automatically initialized on `DOMContentLoaded`. No extra JavaScript is needed for basic usage.
-
-### Manual Initialization
-
-For more control, you can initialize FormIt manually with custom options:
-
-``` javascript
-var form = document.getElementById('my-form');
-var fi = new FormIt(form, {
-    clearOnSuccess: true,
-    onBeforeSubmit: function (form) {
-        console.log('Submitting...');
-        // return false to cancel submission
-    },
-    onSuccess: function (data) {
-        console.log('Form submitted successfully', data);
-    },
-    onError: function (data) {
-        console.log('Validation failed', data);
-    },
-    onComplete: function () {
-        console.log('Request finished');
-    },
-    onRedirect: function (url) {
-        console.log('Redirecting to', url);
-        // return false to prevent redirect
-    }
-});
-```
-
-### Options
-
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `clearOnSuccess` | Boolean | `true` | Reset the form after a successful submission (when no redirect). |
-| `onBeforeSubmit` | Function | `null` | Called before the AJAX request. Receives the form element. Return `false` to cancel. |
-| `onSuccess` | Function | `null` | Called on successful submission. Receives the response data. |
-| `onError` | Function | `null` | Called when validation fails. Receives the response data. |
-| `onComplete` | Function | `null` | Called after every request regardless of result. |
-| `onRedirect` | Function | `null` | Called before redirect. Receives the URL. Return `false` to prevent redirect. |
-
-### Global Defaults
-
-You can override defaults globally before initialization:
-
-``` javascript
-FormIt.defaults.clearOnSuccess = false;
-```
 
 ## JavaScript Events
 

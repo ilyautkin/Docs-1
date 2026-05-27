@@ -110,13 +110,6 @@ FormIt может отправлять формы через AJAX без пол�
       </li>
     </ul>
 
-    <br class="clear" />
-
-    [[!+formit.recaptcha_html]]
-    <span data-formit-error="recaptcha">[[!+fi.error.recaptcha]]</span>
-
-    <br class="clear" />
-
     <div class="form-buttons">
         <input type="submit" value="Отправить" />
     </div>
@@ -142,53 +135,6 @@ FormIt может отправлять формы через AJAX без пол�
 ### Автоматическая инициализация
 
 Формы с атрибутом `data-formit-ajax-token` автоматически инициализируются при событии `DOMContentLoaded`. Для базового использования дополнительный JavaScript не нужен.
-
-### Ручная инициализация
-
-Для большего контроля вы можете инициализировать FormIt вручную с пользовательскими опциями:
-
-```javascript
-var form = document.getElementById('my-form');
-var fi = new FormIt(form, {
-    clearOnSuccess: true,
-    onBeforeSubmit: function (form) {
-        console.log('Отправка...');
-        // return false для отмены отправки
-    },
-    onSuccess: function (data) {
-        console.log('Форма успешно отправлена', data);
-    },
-    onError: function (data) {
-        console.log('Ошибка валидации', data);
-    },
-    onComplete: function () {
-        console.log('Запрос завершён');
-    },
-    onRedirect: function (url) {
-        console.log('Перенаправление на', url);
-        // return false для предотвращения редиректа
-    }
-});
-```
-
-### Опции
-
-| Опция | Тип | По умолчанию | Описание |
-|---|---|---|---|
-| `clearOnSuccess` | Boolean | `true` | Сбросить форму после успешной отправки (когда нет редиректа). |
-| `onBeforeSubmit` | Function | `null` | Вызывается перед AJAX-запросом. Получает элемент формы. Верните `false` для отмены. |
-| `onSuccess` | Function | `null` | Вызывается при успешной отправке. Получает данные ответа. |
-| `onError` | Function | `null` | Вызывается при ошибке валидации. Получает данные ответа. |
-| `onComplete` | Function | `null` | Вызывается после каждого запроса независимо от результата. |
-| `onRedirect` | Function | `null` | Вызывается перед редиректом. Получает URL. Верните `false` для предотвращения редиректа. |
-
-### Глобальные значения по умолчанию
-
-Вы можете переопределить значения по умолчанию глобально до инициализации:
-
-```javascript
-FormIt.defaults.clearOnSuccess = false;
-```
 
 ## JavaScript-события
 
